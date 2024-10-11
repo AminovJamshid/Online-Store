@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Comment extends Model
+class Order extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'product_id', 'text'
+        'user_id', 'total', 'status'
     ];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -18,8 +18,8 @@ class Comment extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function product(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function products(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsTo(Order_product::class);
+        return $this->belongsToMany(Order_product::class);
     }
 }

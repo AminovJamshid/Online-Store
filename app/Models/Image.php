@@ -5,18 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Comment extends Model
+class Image extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'product_id', 'text'
+        'product_id', 'url'
     ];
-
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
 
     public function product(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
