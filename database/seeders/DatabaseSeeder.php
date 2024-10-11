@@ -1,30 +1,40 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace Database\Seeders;
 
-return new class extends Migration
+use App\Models\Category;
+use App\Models\Comment;
+use App\Models\Image;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\User;
+use Illuminate\Database\Seeder;
+
+class DatabaseSeeder extends Seeder
 {
     /**
-     * Run the migrations.
+     * Seed the application's database.
      */
-    public function up(): void
+    public function run(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->integer('total');
-            $table->enum('status', ['pending', 'completed', 'cancelled']);
-            $table->timestamps();
-        });
-    }
+        $this->call([
+            CategorySeeder::class,
+            UserSeeder::class,
+            ProductSeeder::class,
+        ]);
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('orders');
+//
+//        User::factory()
+//            ->count(50)
+//            ->create()
+//            ->each(function ($user) {
+////                $user->cart()->create();
+//
+//                Order::factory()->count(rand(0, 5))->for($user)->create();
+//            });
+//
+
+
+//        Cart::factory()->count(5)->create();
     }
-};
+}

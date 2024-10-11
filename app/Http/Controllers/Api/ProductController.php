@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Models\Order_product;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -13,11 +13,18 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): \Illuminate\Database\Eloquent\Collection
+    public function index(Request $request): \Illuminate\Database\Eloquent\Collection
     {
-//        dd(\request()->all());
-        return Order_product::query()
-            ->where('category_id', request()->category_id)
+        return Product::query()
+            ->when(
+                $request->category_id,
+                function ($query) use ($request) {
+                    return $query->where('category_id', $request->category_id);
+                })
+            ->when($request->order && $request->order_by, function ($query) use ($request) {
+                return $query->orderBy($request->order_by, $request->order);
+            })
+            ->limit($request->limit)
             ->get();
     }
 
@@ -32,13 +39,13 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): Order_product
+    public function store(Request $request): Product
     {
-        $product              = new Order_product();
+        $product              = new Product();
         $product->name        = $request->input('name');
         $product->description = $request->input('description');
         $product->price       = $request->input('price');
-        $product->category()->associate($request->input('category'));
+        $product->category()->associate($request->input('category_id'));
         $product->save();
 
         return $product;
@@ -47,7 +54,7 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Order_product $product): \Illuminate\Database\Eloquent\Collection
+    public function show(Product $product): \Illuminate\Database\Eloquent\Collection
     {
         return $product->with('category')->get();
     }
@@ -55,7 +62,7 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Order_product $product)
+    public function edit(Product $product)
     {
         //
     }
@@ -63,7 +70,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductRequest $request, Order_product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
         //
     }
@@ -71,8 +78,19 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Order_product $product)
+    public function destroy(Product $product)
     {
         //
+    }
+
+    public function getProductsByCategory($id)
+    {
+        $products = Product::query()->where('category_id', $id)
+            ->with('category');
+
+
+        new \App\Http\Controllers\Resources\ProductResource($products->first());
+
+        new \App\Http\Resources\ProductCollection($products->get());
     }
 }
