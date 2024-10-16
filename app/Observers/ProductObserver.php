@@ -12,9 +12,9 @@ class ProductObserver
      */
     public function created(Product $product): void
     {
-        $url = "https://api.telegram.org/bot7032512823:AAFmnkUO_PDRF3xpJU70BgeL6DLqtmRTdzc/sendMessage";
+        $url = "https://api.telegram.org/bot7289329079:AAG4vDttVQqW2DxWBe7AQAgMPw6Co58ugDg/sendMessage";
         Http::post($url, [
-            "chat_id" => "262247413",
+            "chat_id" => "1578982344",
             "text"    => $product
         ]);
     }

@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreCategoriesRequest;
-use App\Http\Requests\UpdateCategoriesRequest;
-use App\Models\Categories;
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -32,26 +31,30 @@ class CategoryController extends Controller
      */
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
+        $request->validate([
+            'name' => 'required'
+        ]);
+
         $category = Category::create([
             'name'      => $request->name,
             'parent_id' => $request->parent_id
         ]);
 
-        return response()->json($category);
+        return response()->json($category, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Categories $categories)
+    public function show(Category $category): Category
     {
-        //
+        return $category;
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Categories $categories)
+    public function edit(Category $category)
     {
         //
     }
@@ -59,16 +62,29 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCategoriesRequest $request, Categories $categories)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $updated = $category->update([
+            'name'      => $request->name,
+            'parent_id' => $request->parent_id
+        ]);
+
+        if ($updated) {
+            return response()->json(['name' => $category->name]);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Categories $categories)
+    public function destroy(Category $category): \Illuminate\Http\JsonResponse
     {
-        //
+        $deleted = $category->delete();
+
+        if ($deleted) {
+            return response()->json([], 204);
+        }
+
+        return response()->json(['message' => 'Resource not deleted'], 500);
     }
 }

@@ -23,6 +23,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Log::debug('Application loaded, understand bro?');
     }
 }

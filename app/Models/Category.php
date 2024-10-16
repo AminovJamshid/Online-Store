@@ -13,12 +13,12 @@ class Category extends Model
         'name', 'parent_id'
     ];
 
-    public function products(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function products()
     {
-        return $this->hasMany(Order_product::class);
+        return $this->hasMany(Product::class);
     }
 
-    public function subcategories(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function subcategories()
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
