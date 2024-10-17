@@ -7,18 +7,19 @@ use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class CategoryTest extends TestCase
+class CategoryControllerTest extends TestCase
 {
     use RefreshDatabase;
 
     public function test_category_can_be_created()
     {
+        $categoryName = 'Electronics';
         $category = Category::factory()->create([
-            'name' => 'Electronics',
+            'name' => $categoryName,
         ]);
 
         $this->assertInstanceOf(Category::class, $category);
-        $this->assertEquals('Electronics', $category->name);
+        $this->assertEquals($categoryName, $category->name);
     }
 
     public function test_category_can_have_products()
@@ -32,7 +33,7 @@ class CategoryTest extends TestCase
 
     public function test_category_can_have_subcategories()
     {
-        $parentCategory = Category::factory()->create();
+        $parentCategory = Category::factory()->create(['name'=> 'Telefonlar']); // id = 1
         $subCategory = Category::factory()->create(['parent_id' => $parentCategory->id]);
 
         $this->assertTrue($parentCategory->subcategories->contains($subCategory));
@@ -81,5 +82,21 @@ class CategoryTest extends TestCase
         $this->assertEquals('Test Category', $category->name);
         $this->assertEquals(1, $category->parent_id);
         $this->assertArrayNotHasKey('non_fillable_attribute', $category->getAttributes());
+    }
+
+    public function test_category_has_default_values()
+    {
+        $category = new Category();
+
+        $this->assertNull($category->parent_id); // Assuming parent_id defaults to null
+    }
+
+    public function test_category_soft_deletes()
+    {
+        $category = Category::factory()->create();
+
+        $category->delete();
+
+        $this->assertSoftDeleted($category);
     }
 }
