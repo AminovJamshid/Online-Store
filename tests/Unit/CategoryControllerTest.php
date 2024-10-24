@@ -91,7 +91,7 @@ class CategoryControllerTest extends TestCase
         $this->assertNull($category->parent_id); // Assuming parent_id defaults to null
     }
 
-    public function test_category_soft_deletes()
+    public function category_soft_deletes(): void
     {
         $category = Category::factory()->create();
 

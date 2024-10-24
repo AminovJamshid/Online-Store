@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Observers\ProductObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[ObservedBy(ProductObserver::class)]
 class Product extends Model
 {
     use HasFactory;
@@ -13,22 +16,22 @@ class Product extends Model
         'name', 'description', 'price', 'stock', 'category_id', 'vendor_id'
     ];
 
-    public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class, 'vendor_id');
     }
 
-    public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function comments()
     {
         return $this->hasMany(Comment::class);
     }
 
-    public function images(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function images()
     {
         return $this->hasMany(Image::class);
     }

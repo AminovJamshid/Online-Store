@@ -13,13 +13,13 @@ class Comment extends Model
         'user_id', 'product_id', 'text'
     ];
 
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function product(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function product()
     {
-        return $this->belongsTo(Order_product::class);
+        return $this->belongsTo(Product::class);
     }
 }

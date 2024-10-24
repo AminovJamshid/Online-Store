@@ -13,19 +13,19 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): \Illuminate\Database\Eloquent\Collection
+    public function index(Request $request)
     {
         return Product::query()
-            ->when(
-                $request->category_id,
-                function ($query) use ($request) {
-                    return $query->where('category_id', $request->category_id);
-                })
-            ->when($request->order && $request->order_by, function ($query) use ($request) {
-                return $query->orderBy($request->order_by, $request->order);
-            })
-            ->limit($request->limit)
-            ->get();
+                      ->when(
+                          $request->category_id,
+                          function ($query) use ($request) {
+                              return $query->where('category_id', $request->category_id);
+                          })
+                      ->when($request->order && $request->order_by, function ($query) use ($request) {
+                          return $query->orderBy($request->order_by, $request->order);
+                      })
+                      ->limit($request->limit)
+                      ->get();
     }
 
     /**
@@ -39,7 +39,7 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): Product
+    public function store(Request $request)
     {
         $product              = new Product();
         $product->name        = $request->input('name');
@@ -54,7 +54,7 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product): \Illuminate\Database\Eloquent\Collection
+    public function show(Product $product)
     {
         return $product->with('category')->get();
     }
@@ -86,11 +86,11 @@ class ProductController extends Controller
     public function getProductsByCategory($id)
     {
         $products = Product::query()->where('category_id', $id)
-            ->with('category');
+                           ->with('category');
 
 
-        new \App\Http\Controllers\Resources\ProductResource($products->first());
+         new \App\Http\Resources\ProductResource($products->first());
 
-        new \App\Http\Resources\ProductCollection($products->get());
+         new \App\Http\Resources\ProductCollection($products->get());
     }
 }

@@ -13,13 +13,13 @@ class Order extends Model
         'user_id', 'total', 'status'
     ];
 
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function products(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function products()
     {
-        return $this->belongsToMany(Order_product::class);
+        return $this->belongsToMany(Product::class);
     }
 }

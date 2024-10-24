@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class CategoryControllerTest extends TestCase
@@ -21,14 +22,14 @@ class CategoryControllerTest extends TestCase
         Sanctum::actingAs($user);
     }
 
-    public function test_index_returns_successful_response()
+   public function test_index_returns_successful_response()
     {
         Category::factory(3)->create();
 
         $response = $this->getJson('/api/categories');
 
         $response->assertStatus(200)
-            ->assertJsonCount(3);
+                 ->assertJsonCount(3);
     }
 
     public function test_store_creates_new_category()
@@ -38,7 +39,7 @@ class CategoryControllerTest extends TestCase
         ]);
 
         $response->assertStatus(201)
-            ->assertJsonFragment(['name' => 'New Category']);
+                 ->assertJsonFragment(['name' => 'New Category']);
     }
 
     public function test_store_fails_with_invalid_data()
@@ -48,7 +49,7 @@ class CategoryControllerTest extends TestCase
         ]);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors('name');
+                 ->assertJsonValidationErrors('name');
     }
 
     public function test_show_returns_category()
@@ -58,7 +59,7 @@ class CategoryControllerTest extends TestCase
         $response = $this->getJson("/api/categories/$category->id");
 
         $response->assertStatus(200)
-            ->assertJsonFragment(['name' => $category->name]);
+                 ->assertJsonFragment(['name' => $category->name]);
     }
 
     public function test_show_fails_for_nonexistent_category()
@@ -77,7 +78,7 @@ class CategoryControllerTest extends TestCase
         ]);
 
         $response->assertStatus(200)
-            ->assertJsonFragment(['name' => 'Updated Category']);
+                 ->assertJsonFragment(['name' => 'Updated Category']);
     }
 
     public function test_update_fails_with_invalid_data()
@@ -89,7 +90,7 @@ class CategoryControllerTest extends TestCase
         ]);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors('name');
+                 ->assertJsonValidationErrors('name');
     }
 
     public function test_destroy_removes_category()
@@ -109,4 +110,5 @@ class CategoryControllerTest extends TestCase
         $response->assertStatus(404);
     }
 }
+
 

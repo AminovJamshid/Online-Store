@@ -17,6 +17,6 @@ Route::resource('/categories', CategoryController::class);
 //     ->middleware('auth:sanctum');
 
 Route::resource('/products', ProductController::class)
-    ->middleware('auth:sanctum');
+     ->middleware('auth:sanctum');
 
 Route::get('/categories/{category}/products', [ProductController::class, 'getProductsByCategory']);

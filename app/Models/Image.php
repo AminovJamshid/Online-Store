@@ -13,8 +13,8 @@ class Image extends Model
         'product_id', 'url'
     ];
 
-    public function product(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function product()
     {
-        return $this->belongsTo(Order_product::class);
+        return $this->belongsTo(Product::class);
     }
 }
